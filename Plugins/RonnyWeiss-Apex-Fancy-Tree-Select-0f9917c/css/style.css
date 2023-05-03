@@ -1,0 +1,12 @@
+.fancytree-title > mark {
+    font-weight: bold;
+    background-color: inherit;
+}
+
+span.fancytree-title {
+    color: inherit;
+}
+
+ul.fancytree-container {
+    background-color: transparent;
+}
