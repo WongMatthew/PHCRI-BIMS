@@ -28,7 +28,7 @@ prompt APPLICATION 104 - HLI BIMS - Update
 -- Application Export:
 --   Application:     104
 --   Name:            HLI BIMS - Update
---   Date and Time:   11:59 Wednesday May 3, 2023
+--   Date and Time:   14:33 Wednesday May 3, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -112,7 +112,7 @@ wwv_flow_imp.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'HLI BIMS - Update'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230503115846'
+,p_last_upd_yyyymmddhh24miss=>'20230503142335'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>4
 ,p_print_server_type=>'INSTANCE'
@@ -170,7 +170,7 @@ wwv_flow_imp_shared.create_list_item(
 ,p_list_item_display_sequence=>30
 ,p_list_item_link_text=>'Specimen Types'
 ,p_list_item_link_target=>'f?p=&APP_ID.:210:&SESSION.::&DEBUG.::::'
-,p_list_item_icon=>'fa-table'
+,p_list_item_icon=>'fa-flask'
 ,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
 ,p_list_item_current_for_pages=>'210'
 );
@@ -179,7 +179,7 @@ wwv_flow_imp_shared.create_list_item(
 ,p_list_item_display_sequence=>40
 ,p_list_item_link_text=>'Contacts'
 ,p_list_item_link_target=>'f?p=&APP_ID.:220:&APP_SESSION.::&DEBUG.:::'
-,p_list_item_icon=>'fa-table'
+,p_list_item_icon=>'fa-phone'
 ,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
 ,p_list_item_current_for_pages=>'220'
 );
@@ -188,7 +188,7 @@ wwv_flow_imp_shared.create_list_item(
 ,p_list_item_display_sequence=>50
 ,p_list_item_link_text=>'Organizations'
 ,p_list_item_link_target=>'f?p=&APP_ID.:11:&APP_SESSION.::&DEBUG.:::'
-,p_list_item_icon=>'fa-table'
+,p_list_item_icon=>'fa-institution'
 ,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
 ,p_list_item_current_for_pages=>'11'
 );
@@ -249,7 +249,23 @@ wwv_flow_imp_shared.create_list_item(
 ,p_list_item_display_sequence=>30
 ,p_list_item_link_text=>'Specimen Types'
 ,p_list_item_link_target=>'f?p=&APP_ID.:210:&SESSION.::&DEBUG.::::'
-,p_list_item_icon=>'fa-table'
+,p_list_item_icon=>'fa-flask'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(33629592907300521)
+,p_list_item_display_sequence=>40
+,p_list_item_link_text=>'Contacts'
+,p_list_item_link_target=>'f?p=&APP_ID.:220:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-phone'
+,p_list_item_current_type=>'TARGET_PAGE'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(33631225895313667)
+,p_list_item_display_sequence=>50
+,p_list_item_link_text=>'Organizations'
+,p_list_item_link_target=>'f?p=&APP_ID.:11:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-institution'
 ,p_list_item_current_type=>'TARGET_PAGE'
 );
 end;
@@ -14585,6 +14601,7 @@ wwv_flow_imp_page.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_protection_level=>'C'
+,p_page_component_map=>'18'
 ,p_last_updated_by=>'MWONG'
 ,p_last_upd_yyyymmddhh24miss=>'20230503115534'
 );
