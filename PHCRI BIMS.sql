@@ -28,13 +28,13 @@ prompt APPLICATION 104 - HLI BIMS - Update
 -- Application Export:
 --   Application:     104
 --   Name:            HLI BIMS - Update
---   Date and Time:   16:20 Thursday May 4, 2023
+--   Date and Time:   11:47 Friday May 5, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
 --     Pages:                      9
 --       Items:                   20
---       Processes:                6
+--       Processes:                8
 --       Regions:                 14
 --       Buttons:                 11
 --     Shared Components:
@@ -59,7 +59,7 @@ prompt APPLICATION 104 - HLI BIMS - Update
 --           Breadcrumb:           1
 --           Button:               3
 --           Report:              12
---         LOVs:                   2
+--         LOVs:                   4
 --       PWA:
 --       Globalization:
 --       Reports:
@@ -112,7 +112,7 @@ wwv_flow_imp.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'HLI BIMS - Update'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230504162036'
+,p_last_upd_yyyymmddhh24miss=>'20230505114643'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>4
 ,p_print_server_type=>'INSTANCE'
@@ -584,6 +584,22 @@ begin
 null;
 end;
 /
+prompt --application/shared_components/user_interface/lovs/bims_projects
+begin
+wwv_flow_imp_shared.create_list_of_values(
+ p_id=>wwv_flow_imp.id(33690123271330287)
+,p_lov_name=>'BIMS_PROJECTS'
+,p_lov_query=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'select PROJECT_NAME as display_value, PROJECT_NAME as return_value ',
+'  from APP_BIMS_ACCESS where upper(USER_NAME) = upper(:APP_USER)',
+'  order by PROJECT_NAME'))
+,p_source_type=>'SQL'
+,p_location=>'LOCAL'
+,p_return_column_name=>'DISPLAY_VALUE'
+,p_display_column_name=>'DISPLAY_VALUE'
+);
+end;
+/
 prompt --application/shared_components/user_interface/lovs/organizations_name
 begin
 wwv_flow_imp_shared.create_list_of_values(
@@ -595,6 +611,29 @@ wwv_flow_imp_shared.create_list_of_values(
 ,p_return_column_name=>'DBID'
 ,p_display_column_name=>'NAME'
 ,p_default_sort_column_name=>'NAME'
+,p_default_sort_direction=>'ASC'
+);
+end;
+/
+prompt --application/shared_components/user_interface/lovs/persons
+begin
+wwv_flow_imp_shared.create_list_of_values(
+ p_id=>wwv_flow_imp.id(34719262591426256)
+,p_lov_name=>'PERSONS'
+,p_lov_query=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'SELECT',
+'  FIRST_NAME||'' ''||LAST_NAME AS D,',
+'  DBID AS R',
+'FROM',
+'  PERSONS',
+'ORDER BY',
+'  FIRST_NAME, LAST_NAME'))
+,p_source_type=>'SQL'
+,p_location=>'LOCAL'
+,p_use_local_sync_table=>false
+,p_return_column_name=>'R'
+,p_display_column_name=>'D'
+,p_group_sort_direction=>'ASC'
 ,p_default_sort_direction=>'ASC'
 );
 end;
@@ -15119,9 +15158,9 @@ wwv_flow_imp_page.create_page(
 ,p_page_template_options=>'#DEFAULT#'
 ,p_protection_level=>'C'
 ,p_help_text=>'No help is available for this page.'
-,p_page_component_map=>'17'
+,p_page_component_map=>'16'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230504162036'
+,p_last_upd_yyyymmddhh24miss=>'20230505114643'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(33570773029465941)
@@ -15203,6 +15242,24 @@ wwv_flow_imp_page.create_page_button(
 ,p_button_condition_type=>'ITEM_IS_NULL'
 ,p_database_action=>'INSERT'
 );
+wwv_flow_imp_page.create_page_branch(
+ p_id=>wwv_flow_imp.id(33658067838616913)
+,p_branch_name=>'Go To Page 210'
+,p_branch_action=>'f?p=&APP_ID.:210:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+,p_branch_point=>'AFTER_PROCESSING'
+,p_branch_type=>'REDIRECT_URL'
+,p_branch_sequence=>10
+,p_branch_condition_type=>'REQUEST_IN_CONDITION'
+,p_branch_condition=>'CANCEL,DELETE'
+);
+wwv_flow_imp_page.create_page_branch(
+ p_id=>wwv_flow_imp.id(33658177420616914)
+,p_branch_name=>'Go To Page 211'
+,p_branch_action=>'f?p=&APP_ID.:211:&SESSION.::&DEBUG.:::&success_msg=#SUCCESS_MSG#'
+,p_branch_point=>'AFTER_PROCESSING'
+,p_branch_type=>'REDIRECT_URL'
+,p_branch_sequence=>20
+);
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(33570929470465943)
 ,p_name=>'P211_DBID'
@@ -15225,7 +15282,11 @@ wwv_flow_imp_page.create_page_item(
 ,p_source=>'BIMS_PROJECT_NAME'
 ,p_source_type=>'DB_COLUMN'
 ,p_display_as=>'NATIVE_SELECT_LIST'
-,p_named_lov=>'PERSONS.SALUTATION'
+,p_named_lov=>'BIMS_PROJECTS'
+,p_lov=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'select PROJECT_NAME as display_value, PROJECT_NAME as return_value ',
+'  from APP_BIMS_ACCESS where upper(USER_NAME) = upper(:APP_USER)',
+'  order by PROJECT_NAME'))
 ,p_lov_display_null=>'YES'
 ,p_cHeight=>1
 ,p_field_template=>wwv_flow_imp.id(22378304808733687)
@@ -15265,13 +15326,19 @@ wwv_flow_imp_page.create_page_item(
 ,p_source=>'INVESTIGATOR_DBID'
 ,p_source_type=>'DB_COLUMN'
 ,p_display_as=>'NATIVE_SELECT_LIST'
-,p_named_lov=>'ORGANIZATIONS.NAME'
-,p_lov_display_null=>'YES'
-,p_lov_null_text=>'&SELECT_NULL_DISPLAY_VALUE.'
+,p_named_lov=>'PERSONS'
+,p_lov=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'SELECT',
+'  FIRST_NAME||'' ''||LAST_NAME AS D,',
+'  DBID AS R',
+'FROM',
+'  PERSONS',
+'ORDER BY',
+'  FIRST_NAME, LAST_NAME'))
 ,p_cHeight=>1
 ,p_field_template=>wwv_flow_imp.id(22378294081733687)
 ,p_item_template_options=>'#DEFAULT#'
-,p_lov_display_extra=>'YES'
+,p_lov_display_extra=>'NO'
 ,p_encrypt_session_state_yn=>'N'
 ,p_attribute_01=>'NONE'
 ,p_attribute_02=>'N'
@@ -15330,13 +15397,19 @@ wwv_flow_imp_page.create_page_item(
 ,p_source=>'COORDINATOR_DBID'
 ,p_source_type=>'DB_COLUMN'
 ,p_display_as=>'NATIVE_SELECT_LIST'
-,p_named_lov=>'PERSONS.SALUTATION'
-,p_lov_display_null=>'YES'
-,p_lov_null_text=>'&SELECT_NULL_DISPLAY_VALUE.'
+,p_named_lov=>'PERSONS'
+,p_lov=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'SELECT',
+'  FIRST_NAME||'' ''||LAST_NAME AS D,',
+'  DBID AS R',
+'FROM',
+'  PERSONS',
+'ORDER BY',
+'  FIRST_NAME, LAST_NAME'))
 ,p_cHeight=>1
 ,p_field_template=>wwv_flow_imp.id(22378294081733687)
 ,p_item_template_options=>'#DEFAULT#'
-,p_lov_display_extra=>'YES'
+,p_lov_display_extra=>'NO'
 ,p_attribute_01=>'NONE'
 ,p_attribute_02=>'N'
 );
@@ -15394,6 +15467,33 @@ wwv_flow_imp_page.create_page_item(
 ,p_item_template_options=>'#DEFAULT#'
 ,p_encrypt_session_state_yn=>'N'
 ,p_attribute_01=>'Y'
+);
+wwv_flow_imp_page.create_page_process(
+ p_id=>wwv_flow_imp.id(33658204938616915)
+,p_process_sequence=>5
+,p_process_point=>'AFTER_SUBMIT'
+,p_process_type=>'NATIVE_PLSQL'
+,p_process_name=>'Get Study PK'
+,p_process_sql_clob=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'begin ',
+'    if :P211_DBID is null then',
+'        select to_number(sys_guid(), ''XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX'') ',
+'          into :P211_DBID',
+'          from sys.dual;',
+'    end if;',
+'end;'))
+,p_process_clob_language=>'PLSQL'
+,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+);
+wwv_flow_imp_page.create_page_process(
+ p_id=>wwv_flow_imp.id(33658433218616917)
+,p_process_sequence=>40
+,p_process_point=>'AFTER_SUBMIT'
+,p_process_type=>'NATIVE_SESSION_STATE'
+,p_process_name=>'Reset Page'
+,p_attribute_01=>'CLEAR_CACHE_CURRENT_PAGE'
+,p_error_display_location=>'INLINE_IN_NOTIFICATION'
+,p_process_when_button_id=>wwv_flow_imp.id(33571287824465946)
 );
 end;
 /
