@@ -28,17 +28,17 @@ prompt APPLICATION 104 - HLI BIMS - Update
 -- Application Export:
 --   Application:     104
 --   Name:            HLI BIMS - Update
---   Date and Time:   13:43 Tuesday May 9, 2023
+--   Date and Time:   15:23 Tuesday May 9, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
 --     Pages:                     12
---       Items:                   34
+--       Items:                   43
 --       Validations:              2
 --       Processes:               13
---       Regions:                 18
---       Buttons:                 22
---       Dynamic Actions:          1
+--       Regions:                 19
+--       Buttons:                 23
+--       Dynamic Actions:          3
 --     Shared Components:
 --       Logic:
 --         Build Options:          1
@@ -115,7 +115,7 @@ wwv_flow_imp.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'HLI BIMS - Update'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230509130556'
+,p_last_upd_yyyymmddhh24miss=>'20230509152217'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>4
 ,p_print_server_type=>'INSTANCE'
@@ -18081,9 +18081,9 @@ wwv_flow_imp_page.create_page(
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_protection_level=>'C'
-,p_page_component_map=>'11'
+,p_page_component_map=>'17'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230509130556'
+,p_last_upd_yyyymmddhh24miss=>'20230509152217'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(33660712321616940)
@@ -18094,50 +18094,38 @@ wwv_flow_imp_page.create_page_plug(
 ,p_plug_display_sequence=>10
 ,p_include_in_reg_disp_sel_yn=>'Y'
 ,p_plug_source=>wwv_flow_string.join(wwv_flow_t_varchar2(
-'SELECT ',
-'/* REQUIRED - positive number id of the element (should start with 1 or higher) */',
-'     ROWNUM AS ID,',
-'/* REQUIRED - positive number id of the parent (top parent should be 0) */',
-'     CASE',
-'         WHEN ROWNUM <= 2 THEN',
-'             0',
-'         ELSE ROUND( ROWNUM / 6 )',
-'     END AS PARENT_ID,',
-'/* REQUIRED - title of the item */',
-'     ''Item '' || ROWNUM AS TITLE,/* tooltip for the item */',
-'/* REQUIRED when use select function - is set to items when selected */',
-'     ROWNUM AS VALUE,',
-'/* REQUIRED when use select function - is mapping value for typeSettings in config json */',
-'     CASE',
-'         WHEN ROWNUM <= 8 THEN',
-'             10',
-'         ELSE 20',
-'     END AS TYPE,',
-'/* Optional - set tooltip for this item */',
-'     ''This is item '' || ROWNUM AS TOOLTIP,',
-'/* Optional - set custom icon for item */',
-'     CASE',
-'         WHEN ROWNUM <= 8 THEN',
-'             ''fa fa-folder-o''',
-'         ELSE ''fa fa-file-o''',
-'     END AS ICON,',
-'/* Optional - set which nodes should be selcted on load (0 or null - not selected; 1 - selected)*/',
-'     CASE',
-'         WHEN ROWNUM <= 8 THEN',
-'             1',
-'     END AS SELECTED,',
-'/* Optional - set if this item is expanded or not (0 or null - not expanded; 1 - expanded)*/',
-'     NULL EXPANDED,',
-'/* Optional - enable or disable checkbox for this item (0 or null - no checkbox; 1 - checkbox)*/',
-'     1 AS CHECKBOX,',
-'/* Optional - used to set item read only (0 or null - selectable; 1 - unselectable)*/',
-'     0 AS UNSELECTABLE',
-'/* activate link on click of the node */',
-'     --,''https://linktr.ee/ronny.weiss'' AS LINK',
-' FROM',
-'     DUAL',
-' CONNECT BY',
-'     ROWNUM <= 30'))
+'SELECT',
+'  /* REQUIRED - positive number id of the element (should start with 1 or higher) */',
+'  STUN.DBID AS ID,',
+'  /* REQUIRED - positive number id of the parent (top parent should be 0) */',
+'  COALESCE(PARENT_STUN.DBID, 0) AS PARENT_ID,',
+'  /* REQUIRED - title of the item */',
+'  STUN.NAME AS TITLE,',
+'  /* REQUIRED when use select function - is set to items when selected */',
+'  TO_CHAR(STUN.DBID) AS VALUE,',
+'  /* REQUIRED when use select function - is mapping value for typeSettings in config json */',
+'  CASE WHEN PARENT_STUN.DBID IS NULL THEN 10 ELSE 20 END AS TYPE,',
+'  /* Optional - set tooltip for this item */',
+'  STUN.DESCRIPTION AS TOOLTIP,',
+'  /* Optional - set custom icon for item */',
+'  CASE WHEN PARENT_STUN.DBID IS NULL THEN ''fa fa-folder-o'' ELSE ''fa fa-file-o'' END AS ICON,',
+'  /* Optional - set which nodes should be selected on load (0 or null - not selected; 1 - selected) */',
+'  NULL AS SELECTED,',
+'  /* Optional - set if this item is expanded or not (0 or null - not expanded; 1 - expanded) */',
+'  NULL AS EXPANDED,',
+'  /* Optional - enable or disable checkbox for this item (0 or null - no checkbox; 1 - checkbox) */',
+'  1 AS CHECKBOX,',
+'  /* Optional - used to set item read-only (0 or null - selectable; 1 - unselectable) */',
+'  0 AS UNSELECTABLE',
+'  /* activate link on click of the node */',
+'  --,''https://linktr.ee/ronny.weiss'' AS LINK',
+'FROM',
+'  STORAGE_UNITS STUN',
+'LEFT JOIN',
+'  STORAGE_UNITS PARENT_STUN ON STUN.PARENT_STUN_DBID = PARENT_STUN.DBID',
+'ORDER BY',
+'  STUN.DBID',
+''))
 ,p_plug_source_type=>'PLUGIN_APEX.FANCYTREE.SELECT'
 ,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
 ,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
@@ -18168,23 +18156,36 @@ wwv_flow_imp_page.create_page_plug(
 '      "time": 400',
 '    }',
 '  },',
-'  "selectMode": 2,',
+'  "selectMode": 1,',
 '  "setActiveNode": true,',
 '  "setItemsOnInit": false,',
 '  "typeSettings": [',
 '    {',
 '      "id": 10,',
-'      "storeItem": "P15_TYPE_10",',
+'      "storeItem": "P200_TYPE_10",',
 '      "icon": "fa-folder-o"',
 '    }, {',
 '      "id": 20,',
-'      "storeItem": "P15_TYPE_20",',
+'      "storeItem": "P200_TYPE_20",',
 '      "icon": "fa-file-o"',
 '    }',
 '  ]',
 '}'))
+,p_attribute_02=>'P200_SEARCH'
 ,p_attribute_03=>'Error occured! Please check browser console for more information.'
 ,p_attribute_05=>'N'
+);
+wwv_flow_imp_page.create_page_plug(
+ p_id=>wwv_flow_imp.id(33661429620616947)
+,p_plug_name=>'Selected Item'
+,p_region_template_options=>'#DEFAULT#:t-Region--scrollBody'
+,p_plug_template=>wwv_flow_imp.id(22315731448733651)
+,p_plug_display_sequence=>20
+,p_include_in_reg_disp_sel_yn=>'Y'
+,p_plug_new_grid_row=>false
+,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
+,p_attribute_01=>'N'
+,p_attribute_02=>'HTML'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(34848430895597426)
@@ -18197,6 +18198,315 @@ wwv_flow_imp_page.create_page_plug(
 ,p_menu_id=>wwv_flow_imp.id(22204586388733587)
 ,p_plug_source_type=>'NATIVE_BREADCRUMB'
 ,p_menu_template_id=>wwv_flow_imp.id(22381710075733690)
+);
+wwv_flow_imp_page.create_page_button(
+ p_id=>wwv_flow_imp.id(33661113372616944)
+,p_button_sequence=>10
+,p_button_plug_id=>wwv_flow_imp.id(33660712321616940)
+,p_button_name=>'Refresh_Tree'
+,p_button_action=>'DEFINED_BY_DA'
+,p_button_template_options=>'#DEFAULT#'
+,p_button_template_id=>wwv_flow_imp.id(22380137439733689)
+,p_button_image_alt=>'Refresh Tree'
+,p_button_position=>'COPY'
+,p_warn_on_unsaved_changes=>null
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(33661003550616943)
+,p_name=>'P200_SEARCH'
+,p_item_sequence=>10
+,p_item_plug_id=>wwv_flow_imp.id(33660712321616940)
+,p_prompt=>'Search'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(33661594750616948)
+,p_name=>'P200_TYPE_10'
+,p_item_sequence=>10
+,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
+,p_display_as=>'NATIVE_HIDDEN'
+,p_attribute_01=>'Y'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(33661612624616949)
+,p_name=>'P200_TYPE_20'
+,p_item_sequence=>20
+,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
+,p_prompt=>'DBID'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(34862159690238702)
+,p_name=>'P200_NAME'
+,p_item_sequence=>30
+,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
+,p_prompt=>'Name'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_encrypt_session_state_yn=>'N'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(34862677258238707)
+,p_name=>'P200_BIMS_PROJECT_NAME'
+,p_item_sequence=>40
+,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
+,p_prompt=>'BIMS Project Name'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_encrypt_session_state_yn=>'N'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(34862863481238709)
+,p_name=>'P200_DESCRIPTION'
+,p_item_sequence=>50
+,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
+,p_prompt=>'Description'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_encrypt_session_state_yn=>'N'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(34862981951238710)
+,p_name=>'P200_TERMINAL'
+,p_item_sequence=>60
+,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
+,p_prompt=>'Terminal'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_encrypt_session_state_yn=>'N'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(34863125548238712)
+,p_name=>'P200_MOVABLE'
+,p_item_sequence=>70
+,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
+,p_prompt=>'Moveable'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_encrypt_session_state_yn=>'N'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(34863433794238715)
+,p_name=>'P200_RESERVED'
+,p_item_sequence=>80
+,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
+,p_prompt=>'Reserved'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_encrypt_session_state_yn=>'N'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_da_event(
+ p_id=>wwv_flow_imp.id(33661202151616945)
+,p_name=>'Refresh Tree'
+,p_event_sequence=>10
+,p_triggering_element_type=>'BUTTON'
+,p_triggering_button_id=>wwv_flow_imp.id(33661113372616944)
+,p_bind_type=>'bind'
+,p_execution_type=>'IMMEDIATE'
+,p_bind_event_type=>'click'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(33661312717616946)
+,p_event_id=>wwv_flow_imp.id(33661202151616945)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_name=>'Refresh'
+,p_action=>'NATIVE_REFRESH'
+,p_affected_elements_type=>'REGION'
+,p_affected_region_id=>wwv_flow_imp.id(33660712321616940)
+);
+wwv_flow_imp_page.create_page_da_event(
+ p_id=>wwv_flow_imp.id(33661742809616950)
+,p_name=>'display data'
+,p_event_sequence=>20
+,p_triggering_element_type=>'ITEM'
+,p_triggering_element=>'P200_TYPE_20'
+,p_bind_type=>'bind'
+,p_execution_type=>'IMMEDIATE'
+,p_bind_event_type=>'change'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(34862049820238701)
+,p_event_id=>wwv_flow_imp.id(33661742809616950)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_name=>'Name'
+,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
+,p_attribute_01=>'select "NAME" into :P200_NAME from storage_units where dbid = :P200_TYPE_20;'
+,p_attribute_02=>'P200_TYPE_20'
+,p_attribute_03=>'P200_NAME'
+,p_attribute_04=>'N'
+,p_attribute_05=>'PLSQL'
+,p_wait_for_result=>'Y'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(34862502720238706)
+,p_event_id=>wwv_flow_imp.id(33661742809616950)
+,p_event_result=>'TRUE'
+,p_action_sequence=>20
+,p_execute_on_page_init=>'N'
+,p_name=>'BIMS Project Name'
+,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
+,p_attribute_01=>'select "BIMS_PROJECT_NAME" into :P200_BIMS_PROJECT_NAME from storage_units where dbid = :P200_TYPE_20;'
+,p_attribute_02=>'P200_TYPE_20'
+,p_attribute_03=>'P200_BIMS_PROJECT_NAME'
+,p_attribute_04=>'N'
+,p_attribute_05=>'PLSQL'
+,p_wait_for_result=>'Y'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(34862769725238708)
+,p_event_id=>wwv_flow_imp.id(33661742809616950)
+,p_event_result=>'TRUE'
+,p_action_sequence=>30
+,p_execute_on_page_init=>'N'
+,p_name=>'Description'
+,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
+,p_attribute_01=>'select "DESCRIPTION" into :P200_DESCRIPTION from storage_units where dbid = :P200_TYPE_20;'
+,p_attribute_02=>'P200_TYPE_20'
+,p_attribute_03=>'P200_DESCRIPTION'
+,p_attribute_04=>'N'
+,p_attribute_05=>'PLSQL'
+,p_wait_for_result=>'Y'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(34863052371238711)
+,p_event_id=>wwv_flow_imp.id(33661742809616950)
+,p_event_result=>'TRUE'
+,p_action_sequence=>40
+,p_execute_on_page_init=>'N'
+,p_name=>'Terminal'
+,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'DECLARE',
+'  l_terminal NUMBER;',
+'  l_result VARCHAR2(3);',
+'BEGIN',
+'  SELECT "TERMINAL" INTO l_terminal FROM storage_units WHERE dbid = :P200_TYPE_20;',
+'',
+'  CASE l_terminal',
+'    WHEN 1 THEN l_result := ''Yes'';',
+'    WHEN 0 THEN l_result := ''No'';',
+'  END CASE;',
+'',
+'  :P200_TERMINAL := l_result;',
+'END;',
+''))
+,p_attribute_02=>'P200_TYPE_20'
+,p_attribute_03=>'P200_TERMINAL'
+,p_attribute_04=>'N'
+,p_attribute_05=>'PLSQL'
+,p_wait_for_result=>'Y'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(34863292450238713)
+,p_event_id=>wwv_flow_imp.id(33661742809616950)
+,p_event_result=>'TRUE'
+,p_action_sequence=>50
+,p_execute_on_page_init=>'N'
+,p_name=>'Movable'
+,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'DECLARE',
+'  l_movable NUMBER;',
+'  l_result VARCHAR2(3);',
+'BEGIN',
+'  SELECT "MOVABLE" INTO l_movable FROM storage_units WHERE dbid = :P200_TYPE_20;',
+'',
+'  CASE l_movable',
+'    WHEN 1 THEN l_result := ''Yes'';',
+'    WHEN 0 THEN l_result := ''No'';',
+'  END CASE;',
+'',
+'  :P200_MOVABLE := l_result;',
+'END;',
+''))
+,p_attribute_02=>'P200_TYPE_20'
+,p_attribute_03=>'P200_MOVABLE'
+,p_attribute_04=>'N'
+,p_attribute_05=>'PLSQL'
+,p_wait_for_result=>'Y'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(34863384597238714)
+,p_event_id=>wwv_flow_imp.id(33661742809616950)
+,p_event_result=>'TRUE'
+,p_action_sequence=>60
+,p_execute_on_page_init=>'N'
+,p_name=>'Reserved'
+,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'DECLARE',
+'  l_reserved NUMBER;',
+'  l_result VARCHAR2(3);',
+'BEGIN',
+'  SELECT "RESERVED" INTO l_reserved FROM storage_units WHERE dbid = :P200_TYPE_20;',
+'',
+'  CASE l_reserved',
+'    WHEN 1 THEN l_result := ''Yes'';',
+'    WHEN 0 THEN l_result := ''No'';',
+'  END CASE;',
+'',
+'  :P200_RESERVED := l_result;',
+'END;',
+''))
+,p_attribute_02=>'P200_TYPE_20'
+,p_attribute_03=>'P200_RESERVED'
+,p_attribute_04=>'N'
+,p_attribute_05=>'PLSQL'
+,p_wait_for_result=>'Y'
 );
 end;
 /
