@@ -28,12 +28,12 @@ prompt APPLICATION 104 - HLI BIMS - Update
 -- Application Export:
 --   Application:     104
 --   Name:            HLI BIMS - Update
---   Date and Time:   15:23 Tuesday May 9, 2023
+--   Date and Time:   16:17 Wednesday May 10, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
 --     Pages:                     12
---       Items:                   43
+--       Items:                   44
 --       Validations:              2
 --       Processes:               13
 --       Regions:                 19
@@ -115,7 +115,7 @@ wwv_flow_imp.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'HLI BIMS - Update'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230509152217'
+,p_last_upd_yyyymmddhh24miss=>'20230510160734'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>4
 ,p_print_server_type=>'INSTANCE'
@@ -161,16 +161,25 @@ wwv_flow_imp_shared.create_list_item(
 ,p_list_item_current_type=>'TARGET_PAGE'
 );
 wwv_flow_imp_shared.create_list_item(
- p_id=>wwv_flow_imp.id(22418452329733764)
+ p_id=>wwv_flow_imp.id(34847915698597426)
 ,p_list_item_display_sequence=>20
+,p_list_item_link_text=>'Storage'
+,p_list_item_link_target=>'f?p=&APP_ID.:200:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-folders'
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'200'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(22418452329733764)
+,p_list_item_display_sequence=>30
 ,p_list_item_link_text=>'Studies'
-,p_list_item_link_target=>'f?p=&APP_ID.:2:&APP_SESSION.::&DEBUG.:::'
+,p_list_item_link_target=>'f?p=&APP_ID.:2:&SESSION.::&DEBUG.::::'
 ,p_list_item_icon=>'fa-folder'
 ,p_list_item_current_type=>'TARGET_PAGE'
 );
 wwv_flow_imp_shared.create_list_item(
  p_id=>wwv_flow_imp.id(33561719093454375)
-,p_list_item_display_sequence=>30
+,p_list_item_display_sequence=>40
 ,p_list_item_link_text=>'Specimen Types'
 ,p_list_item_link_target=>'f?p=&APP_ID.:210:&SESSION.::&DEBUG.::::'
 ,p_list_item_icon=>'fa-flask'
@@ -179,30 +188,21 @@ wwv_flow_imp_shared.create_list_item(
 );
 wwv_flow_imp_shared.create_list_item(
  p_id=>wwv_flow_imp.id(33594221410620528)
-,p_list_item_display_sequence=>40
+,p_list_item_display_sequence=>50
 ,p_list_item_link_text=>'Contacts'
-,p_list_item_link_target=>'f?p=&APP_ID.:220:&APP_SESSION.::&DEBUG.:::'
+,p_list_item_link_target=>'f?p=&APP_ID.:220:&SESSION.::&DEBUG.::::'
 ,p_list_item_icon=>'fa-phone'
 ,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
 ,p_list_item_current_for_pages=>'220'
 );
 wwv_flow_imp_shared.create_list_item(
  p_id=>wwv_flow_imp.id(33600393894881840)
-,p_list_item_display_sequence=>50
+,p_list_item_display_sequence=>60
 ,p_list_item_link_text=>'Organizations'
-,p_list_item_link_target=>'f?p=&APP_ID.:11:&APP_SESSION.::&DEBUG.:::'
+,p_list_item_link_target=>'f?p=&APP_ID.:11:&SESSION.::&DEBUG.::::'
 ,p_list_item_icon=>'fa-institution'
 ,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
 ,p_list_item_current_for_pages=>'11'
-);
-wwv_flow_imp_shared.create_list_item(
- p_id=>wwv_flow_imp.id(34847915698597426)
-,p_list_item_display_sequence=>60
-,p_list_item_link_text=>'Storage'
-,p_list_item_link_target=>'f?p=&APP_ID.:200:&APP_SESSION.::&DEBUG.:::'
-,p_list_item_icon=>'fa-file-o'
-,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
-,p_list_item_current_for_pages=>'200'
 );
 end;
 /
@@ -18083,7 +18083,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'17'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230509152217'
+,p_last_upd_yyyymmddhh24miss=>'20230509153628'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(33660712321616940)
@@ -18268,7 +18268,7 @@ wwv_flow_imp_page.create_page_item(
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(34862677258238707)
 ,p_name=>'P200_BIMS_PROJECT_NAME'
-,p_item_sequence=>40
+,p_item_sequence=>50
 ,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
 ,p_prompt=>'BIMS Project Name'
 ,p_display_as=>'NATIVE_TEXT_FIELD'
@@ -18284,7 +18284,7 @@ wwv_flow_imp_page.create_page_item(
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(34862863481238709)
 ,p_name=>'P200_DESCRIPTION'
-,p_item_sequence=>50
+,p_item_sequence=>60
 ,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
 ,p_prompt=>'Description'
 ,p_display_as=>'NATIVE_TEXT_FIELD'
@@ -18300,7 +18300,7 @@ wwv_flow_imp_page.create_page_item(
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(34862981951238710)
 ,p_name=>'P200_TERMINAL'
-,p_item_sequence=>60
+,p_item_sequence=>70
 ,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
 ,p_prompt=>'Terminal'
 ,p_display_as=>'NATIVE_TEXT_FIELD'
@@ -18316,7 +18316,7 @@ wwv_flow_imp_page.create_page_item(
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(34863125548238712)
 ,p_name=>'P200_MOVABLE'
-,p_item_sequence=>70
+,p_item_sequence=>80
 ,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
 ,p_prompt=>'Moveable'
 ,p_display_as=>'NATIVE_TEXT_FIELD'
@@ -18332,9 +18332,25 @@ wwv_flow_imp_page.create_page_item(
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(34863433794238715)
 ,p_name=>'P200_RESERVED'
-,p_item_sequence=>80
+,p_item_sequence=>90
 ,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
 ,p_prompt=>'Reserved'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_encrypt_session_state_yn=>'N'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(34863780499238718)
+,p_name=>'P200_BARCODE'
+,p_item_sequence=>40
+,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
+,p_prompt=>'Barcode'
 ,p_display_as=>'NATIVE_TEXT_FIELD'
 ,p_cSize=>30
 ,p_field_template=>wwv_flow_imp.id(22377396899733685)
@@ -18384,9 +18400,29 @@ wwv_flow_imp_page.create_page_da_action(
 ,p_execute_on_page_init=>'N'
 ,p_name=>'Name'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
-,p_attribute_01=>'select "NAME" into :P200_NAME from storage_units where dbid = :P200_TYPE_20;'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'if :P200_TYPE_20 is not NULL then ',
+'    select "NAME" into :P200_NAME from storage_units where dbid = :P200_TYPE_20;',
+'else ',
+'    :P200_NAME := '''' ; ',
+'end if ;'))
 ,p_attribute_02=>'P200_TYPE_20'
 ,p_attribute_03=>'P200_NAME'
+,p_attribute_04=>'N'
+,p_attribute_05=>'PLSQL'
+,p_wait_for_result=>'Y'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(34863657983238717)
+,p_event_id=>wwv_flow_imp.id(33661742809616950)
+,p_event_result=>'TRUE'
+,p_action_sequence=>20
+,p_execute_on_page_init=>'N'
+,p_name=>'Barcode'
+,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
+,p_attribute_01=>'select "BARCODE" into :P200_BARCODE from storage_units where dbid = :P200_TYPE_20;'
+,p_attribute_02=>'P200_TYPE_20'
+,p_attribute_03=>'P200_BARCODE'
 ,p_attribute_04=>'N'
 ,p_attribute_05=>'PLSQL'
 ,p_wait_for_result=>'Y'
@@ -18395,7 +18431,7 @@ wwv_flow_imp_page.create_page_da_action(
  p_id=>wwv_flow_imp.id(34862502720238706)
 ,p_event_id=>wwv_flow_imp.id(33661742809616950)
 ,p_event_result=>'TRUE'
-,p_action_sequence=>20
+,p_action_sequence=>30
 ,p_execute_on_page_init=>'N'
 ,p_name=>'BIMS Project Name'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
@@ -18410,7 +18446,7 @@ wwv_flow_imp_page.create_page_da_action(
  p_id=>wwv_flow_imp.id(34862769725238708)
 ,p_event_id=>wwv_flow_imp.id(33661742809616950)
 ,p_event_result=>'TRUE'
-,p_action_sequence=>30
+,p_action_sequence=>40
 ,p_execute_on_page_init=>'N'
 ,p_name=>'Description'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
@@ -18425,7 +18461,7 @@ wwv_flow_imp_page.create_page_da_action(
  p_id=>wwv_flow_imp.id(34863052371238711)
 ,p_event_id=>wwv_flow_imp.id(33661742809616950)
 ,p_event_result=>'TRUE'
-,p_action_sequence=>40
+,p_action_sequence=>50
 ,p_execute_on_page_init=>'N'
 ,p_name=>'Terminal'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
@@ -18454,7 +18490,7 @@ wwv_flow_imp_page.create_page_da_action(
  p_id=>wwv_flow_imp.id(34863292450238713)
 ,p_event_id=>wwv_flow_imp.id(33661742809616950)
 ,p_event_result=>'TRUE'
-,p_action_sequence=>50
+,p_action_sequence=>60
 ,p_execute_on_page_init=>'N'
 ,p_name=>'Movable'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
@@ -18483,7 +18519,7 @@ wwv_flow_imp_page.create_page_da_action(
  p_id=>wwv_flow_imp.id(34863384597238714)
 ,p_event_id=>wwv_flow_imp.id(33661742809616950)
 ,p_event_result=>'TRUE'
-,p_action_sequence=>60
+,p_action_sequence=>70
 ,p_execute_on_page_init=>'N'
 ,p_name=>'Reserved'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
