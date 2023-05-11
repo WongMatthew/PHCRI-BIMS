@@ -28,7 +28,7 @@ prompt APPLICATION 104 - HLI BIMS - Update
 -- Application Export:
 --   Application:     104
 --   Name:            HLI BIMS - Update
---   Date and Time:   16:17 Wednesday May 10, 2023
+--   Date and Time:   09:53 Thursday May 11, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -115,7 +115,7 @@ wwv_flow_imp.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'HLI BIMS - Update'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230510160734'
+,p_last_upd_yyyymmddhh24miss=>'20230511095257'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>4
 ,p_print_server_type=>'INSTANCE'
@@ -247,6 +247,14 @@ wwv_flow_imp_shared.create_list(
  p_id=>wwv_flow_imp.id(22440621368733829)
 ,p_name=>'Page Navigation'
 ,p_list_status=>'PUBLIC'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(34915752212636806)
+,p_list_item_display_sequence=>10
+,p_list_item_link_text=>'Storage'
+,p_list_item_link_target=>'f?p=&APP_ID.:200:&SESSION.::&DEBUG.::::'
+,p_list_item_icon=>'fa-folders'
+,p_list_item_current_type=>'TARGET_PAGE'
 );
 wwv_flow_imp_shared.create_list_item(
  p_id=>wwv_flow_imp.id(22441060125733831)
@@ -18083,7 +18091,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'17'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230509153628'
+,p_last_upd_yyyymmddhh24miss=>'20230511095257'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(33660712321616940)
@@ -18231,8 +18239,15 @@ wwv_flow_imp_page.create_page_item(
 ,p_name=>'P200_TYPE_10'
 ,p_item_sequence=>10
 ,p_item_plug_id=>wwv_flow_imp.id(33661429620616947)
-,p_display_as=>'NATIVE_HIDDEN'
-,p_attribute_01=>'Y'
+,p_prompt=>'New'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
 );
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(33661612624616949)
@@ -18420,7 +18435,12 @@ wwv_flow_imp_page.create_page_da_action(
 ,p_execute_on_page_init=>'N'
 ,p_name=>'Barcode'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
-,p_attribute_01=>'select "BARCODE" into :P200_BARCODE from storage_units where dbid = :P200_TYPE_20;'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'if :P200_TYPE_20 is not NULL then ',
+'    select "BARCODE" into :P200_BARCODE from storage_units where dbid = :P200_TYPE_20;',
+'else ',
+'    :P200_BARCODE := '''' ; ',
+'end if ;'))
 ,p_attribute_02=>'P200_TYPE_20'
 ,p_attribute_03=>'P200_BARCODE'
 ,p_attribute_04=>'N'
@@ -18435,7 +18455,14 @@ wwv_flow_imp_page.create_page_da_action(
 ,p_execute_on_page_init=>'N'
 ,p_name=>'BIMS Project Name'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
-,p_attribute_01=>'select "BIMS_PROJECT_NAME" into :P200_BIMS_PROJECT_NAME from storage_units where dbid = :P200_TYPE_20;'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'if :P200_TYPE_20 is not NULL then ',
+'    select "BIMS_PROJECT_NAME" into :P200_BIMS_PROJECT_NAME from storage_units where dbid = :P200_TYPE_20;',
+'else ',
+'    :P200_BIMS_PROJECT_NAME := '''' ; ',
+'end if ;',
+'',
+''))
 ,p_attribute_02=>'P200_TYPE_20'
 ,p_attribute_03=>'P200_BIMS_PROJECT_NAME'
 ,p_attribute_04=>'N'
@@ -18450,7 +18477,12 @@ wwv_flow_imp_page.create_page_da_action(
 ,p_execute_on_page_init=>'N'
 ,p_name=>'Description'
 ,p_action=>'NATIVE_EXECUTE_PLSQL_CODE'
-,p_attribute_01=>'select "DESCRIPTION" into :P200_DESCRIPTION from storage_units where dbid = :P200_TYPE_20;'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'if :P200_TYPE_20 is not NULL then ',
+'    select "DESCRIPTION" into :P200_DESCRIPTION from storage_units where dbid = :P200_TYPE_20;',
+'else ',
+'    :P200_DESCRIPTION := '''' ; ',
+'end if ;'))
 ,p_attribute_02=>'P200_TYPE_20'
 ,p_attribute_03=>'P200_DESCRIPTION'
 ,p_attribute_04=>'N'
@@ -18470,15 +18502,20 @@ wwv_flow_imp_page.create_page_da_action(
 '  l_terminal NUMBER;',
 '  l_result VARCHAR2(3);',
 'BEGIN',
-'  SELECT "TERMINAL" INTO l_terminal FROM storage_units WHERE dbid = :P200_TYPE_20;',
-'',
-'  CASE l_terminal',
-'    WHEN 1 THEN l_result := ''Yes'';',
-'    WHEN 0 THEN l_result := ''No'';',
-'  END CASE;',
-'',
-'  :P200_TERMINAL := l_result;',
+'  IF :P200_TYPE_20 IS NOT NULL THEN',
+'    SELECT "TERMINAL" INTO l_terminal FROM storage_units WHERE dbid = :P200_TYPE_20;',
+'    ',
+'    CASE l_terminal',
+'      WHEN 1 THEN l_result := ''Yes'';',
+'      WHEN 0 THEN l_result := ''No'';',
+'    END CASE;',
+'    ',
+'    :P200_TERMINAL := l_result;',
+'  ELSE',
+'    :P200_TERMINAL := NULL;',
+'  END IF;',
 'END;',
+'',
 ''))
 ,p_attribute_02=>'P200_TYPE_20'
 ,p_attribute_03=>'P200_TERMINAL'
@@ -18499,14 +18536,18 @@ wwv_flow_imp_page.create_page_da_action(
 '  l_movable NUMBER;',
 '  l_result VARCHAR2(3);',
 'BEGIN',
-'  SELECT "MOVABLE" INTO l_movable FROM storage_units WHERE dbid = :P200_TYPE_20;',
+'  IF :P200_TYPE_20 IS NOT NULL THEN',
+'    SELECT "MOVABLE" INTO l_movable FROM storage_units WHERE dbid = :P200_TYPE_20;',
 '',
-'  CASE l_movable',
-'    WHEN 1 THEN l_result := ''Yes'';',
-'    WHEN 0 THEN l_result := ''No'';',
-'  END CASE;',
+'    CASE l_movable',
+'      WHEN 1 THEN l_result := ''Yes'';',
+'      WHEN 0 THEN l_result := ''No'';',
+'    END CASE;',
 '',
-'  :P200_MOVABLE := l_result;',
+'    :P200_MOVABLE := l_result;',
+'  ELSE',
+'    :P200_MOVABLE := NULL;',
+'  END IF;',
 'END;',
 ''))
 ,p_attribute_02=>'P200_TYPE_20'
@@ -18528,14 +18569,18 @@ wwv_flow_imp_page.create_page_da_action(
 '  l_reserved NUMBER;',
 '  l_result VARCHAR2(3);',
 'BEGIN',
-'  SELECT "RESERVED" INTO l_reserved FROM storage_units WHERE dbid = :P200_TYPE_20;',
+'  IF :P200_TYPE_20 IS NOT NULL THEN',
+'    SELECT "RESERVED" INTO l_reserved FROM storage_units WHERE dbid = :P200_TYPE_20;',
 '',
-'  CASE l_reserved',
-'    WHEN 1 THEN l_result := ''Yes'';',
-'    WHEN 0 THEN l_result := ''No'';',
-'  END CASE;',
+'    CASE l_reserved',
+'      WHEN 1 THEN l_result := ''Yes'';',
+'      WHEN 0 THEN l_result := ''No'';',
+'    END CASE;',
 '',
-'  :P200_RESERVED := l_result;',
+'    :P200_RESERVED := l_result;',
+'  ELSE',
+'    :P200_RESERVED := NULL;',
+'  END IF;',
 'END;',
 ''))
 ,p_attribute_02=>'P200_TYPE_20'
