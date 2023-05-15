@@ -28,24 +28,24 @@ prompt APPLICATION 104 - HLI BIMS - Update
 -- Application Export:
 --   Application:     104
 --   Name:            HLI BIMS - Update
---   Date and Time:   09:53 Thursday May 11, 2023
+--   Date and Time:   09:30 Monday May 15, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
---     Pages:                     12
---       Items:                   44
+--     Pages:                     13
+--       Items:                   46
 --       Validations:              2
 --       Processes:               13
---       Regions:                 19
---       Buttons:                 23
---       Dynamic Actions:          3
+--       Regions:                 22
+--       Buttons:                 24
+--       Dynamic Actions:          4
 --     Shared Components:
 --       Logic:
 --         Build Options:          1
 --       Navigation:
 --         Lists:                  3
 --         Breadcrumbs:            1
---           Entries:              7
+--           Entries:              8
 --       Security:
 --         Authentication:         1
 --         Authorization:          2
@@ -115,7 +115,7 @@ wwv_flow_imp.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'HLI BIMS - Update'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230511095257'
+,p_last_upd_yyyymmddhh24miss=>'20230512122600'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>4
 ,p_print_server_type=>'INSTANCE'
@@ -203,6 +203,15 @@ wwv_flow_imp_shared.create_list_item(
 ,p_list_item_icon=>'fa-institution'
 ,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
 ,p_list_item_current_for_pages=>'11'
+);
+wwv_flow_imp_shared.create_list_item(
+ p_id=>wwv_flow_imp.id(34933627076216548)
+,p_list_item_display_sequence=>70
+,p_list_item_link_text=>'Specimens'
+,p_list_item_link_target=>'f?p=&APP_ID.:230:&APP_SESSION.::&DEBUG.:::'
+,p_list_item_icon=>'fa-file-o'
+,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
+,p_list_item_current_for_pages=>'230'
 );
 end;
 /
@@ -735,6 +744,12 @@ wwv_flow_imp_shared.create_menu_option(
 ,p_short_name=>'Storage'
 ,p_link=>'f?p=&APP_ID.:200:&APP_SESSION.::&DEBUG.:::'
 ,p_page_id=>200
+);
+wwv_flow_imp_shared.create_menu_option(
+ p_id=>wwv_flow_imp.id(34934548955216550)
+,p_short_name=>'Specimens'
+,p_link=>'f?p=&APP_ID.:230:&APP_SESSION.::&DEBUG.:::'
+,p_page_id=>230
 );
 end;
 /
@@ -19393,6 +19408,198 @@ wwv_flow_imp_page.create_page_process(
 ,p_attribute_01=>'CLEAR_CACHE_CURRENT_PAGE'
 ,p_error_display_location=>'INLINE_IN_NOTIFICATION'
 ,p_process_when_button_id=>wwv_flow_imp.id(33569259597465926)
+);
+end;
+/
+prompt --application/pages/page_00230
+begin
+wwv_flow_imp_page.create_page(
+ p_id=>230
+,p_name=>'Specimens'
+,p_alias=>'SPECIMENS'
+,p_step_title=>'Specimens'
+,p_autocomplete_on_off=>'OFF'
+,p_page_template_options=>'#DEFAULT#'
+,p_protection_level=>'C'
+,p_page_component_map=>'17'
+,p_last_updated_by=>'MWONG'
+,p_last_upd_yyyymmddhh24miss=>'20230512122600'
+);
+wwv_flow_imp_page.create_page_plug(
+ p_id=>wwv_flow_imp.id(34863856715238719)
+,p_plug_name=>'Specimen Fancy Tree'
+,p_region_template_options=>'#DEFAULT#:t-Region--scrollBody'
+,p_escape_on_http_output=>'Y'
+,p_plug_template=>wwv_flow_imp.id(22315731448733651)
+,p_plug_display_sequence=>10
+,p_plug_source=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'SELECT',
+'  /* REQUIRED - positive number id of the element (should start with 1 or higher) */',
+'  STUN.DBID AS ID,',
+'  /* REQUIRED - positive number id of the parent (top parent should be 0) */',
+'  COALESCE(PARENT_STUN.DBID, 0) AS PARENT_ID,',
+'  /* REQUIRED - title of the item */',
+'  STUN.NAME AS TITLE,',
+'  /* REQUIRED when use select function - is set to items when selected */',
+'  TO_CHAR(STUN.DBID) AS VALUE,',
+'  /* REQUIRED when use select function - is mapping value for typeSettings in config json */',
+'  CASE WHEN PARENT_STUN.DBID IS NULL THEN 10 ELSE 20 END AS TYPE,',
+'  /* Optional - set tooltip for this item */',
+'  STUN.DESCRIPTION AS TOOLTIP,',
+'  /* Optional - set custom icon for item */',
+'  CASE WHEN PARENT_STUN.DBID IS NULL THEN ''fa fa-folder-o'' ELSE ''fa fa-file-o'' END AS ICON,',
+'  /* Optional - set which nodes should be selected on load (0 or null - not selected; 1 - selected) */',
+'  NULL AS SELECTED,',
+'  /* Optional - set if this item is expanded or not (0 or null - not expanded; 1 - expanded) */',
+'  NULL AS EXPANDED,',
+'  /* Optional - enable or disable checkbox for this item (0 or null - no checkbox; 1 - checkbox) */',
+'  1 AS CHECKBOX,',
+'  /* Optional - used to set item read-only (0 or null - selectable; 1 - unselectable) */',
+'  0 AS UNSELECTABLE',
+'  /* activate link on click of the node */',
+'  --,''https://linktr.ee/ronny.weiss'' AS LINK',
+'FROM',
+'  STORAGE_UNITS STUN',
+'LEFT JOIN',
+'  STORAGE_UNITS PARENT_STUN ON STUN.PARENT_STUN_DBID = PARENT_STUN.DBID',
+'ORDER BY',
+'  STUN.DBID'))
+,p_plug_source_type=>'PLUGIN_APEX.FANCYTREE.SELECT'
+,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
+,p_attribute_01=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'{',
+'  "animationDuration": 200,',
+'  "autoExpand2Level": 0,',
+'  "checkbox": "fa-square-o",',
+'  "checkboxSelected": "fa-check-square",',
+'  "checkboxUnknown": "fa-square",',
+'  "enableCheckBox": true,',
+'  "forceSelectionSet": true,',
+'  "forceRefreshEventOnStart": false,',
+'  "iconExpanderOpen": "fa-caret-down",',
+'  "iconExpanderClosed": "fa-caret-right",',
+'  "markNodesWithChildren": false,',
+'  "markerModifier": "fam-plus fam-is-info",',
+'  "openParentOfActiveNode": true,',
+'  "openParentOfSelected": true,',
+'  "refresh": 0,',
+'  "search": {',
+'    "autoExpand": true,',
+'    "leavesOnly": false,',
+'    "highlight": true,',
+'    "counter": true,',
+'    "hideUnmatched": true,',
+'    "debounce": {',
+'      "enabled": true,',
+'      "time": 400',
+'    }',
+'  },',
+'  "selectMode": 1,',
+'  "setActiveNode": true,',
+'  "setItemsOnInit": false,',
+'  "typeSettings": [',
+'    {',
+'      "id": 10,',
+'      "storeItem": "P230_TYPE_10",',
+'      "icon": "fa-folder-o"',
+'    }, {',
+'      "id": 20,',
+'      "storeItem": "P15_TYPE_20",',
+'      "icon": "fa-file-o"',
+'    }',
+'  ]',
+'}'))
+,p_attribute_02=>'P230_SEARCH'
+,p_attribute_03=>'Error occured! Please check browser console for more information.'
+,p_attribute_05=>'N'
+);
+wwv_flow_imp_page.create_page_plug(
+ p_id=>wwv_flow_imp.id(34864336605238724)
+,p_plug_name=>'Selected Item'
+,p_region_template_options=>'#DEFAULT#:t-Region--scrollBody'
+,p_plug_template=>wwv_flow_imp.id(22315731448733651)
+,p_plug_display_sequence=>20
+,p_include_in_reg_disp_sel_yn=>'Y'
+,p_plug_new_grid_row=>false
+,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
+,p_attribute_01=>'N'
+,p_attribute_02=>'HTML'
+);
+wwv_flow_imp_page.create_page_plug(
+ p_id=>wwv_flow_imp.id(34934173544216548)
+,p_plug_name=>'Breadcrumb'
+,p_region_template_options=>'#DEFAULT#:t-BreadcrumbRegion--useBreadcrumbTitle'
+,p_component_template_options=>'#DEFAULT#'
+,p_plug_template=>wwv_flow_imp.id(22277630303733631)
+,p_plug_display_sequence=>10
+,p_plug_display_point=>'REGION_POSITION_01'
+,p_menu_id=>wwv_flow_imp.id(22204586388733587)
+,p_plug_source_type=>'NATIVE_BREADCRUMB'
+,p_menu_template_id=>wwv_flow_imp.id(22381710075733690)
+,p_plug_query_options=>'DERIVED_REPORT_COLUMNS'
+);
+wwv_flow_imp_page.create_page_button(
+ p_id=>wwv_flow_imp.id(34863947643238720)
+,p_button_sequence=>10
+,p_button_plug_id=>wwv_flow_imp.id(34863856715238719)
+,p_button_name=>'Refresh_Tree'
+,p_button_action=>'DEFINED_BY_DA'
+,p_button_template_options=>'#DEFAULT#'
+,p_button_template_id=>wwv_flow_imp.id(22380137439733689)
+,p_button_image_alt=>'Refresh Tree'
+,p_button_position=>'COPY'
+,p_warn_on_unsaved_changes=>null
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(34864009597238721)
+,p_name=>'P230_SEARCH'
+,p_item_sequence=>10
+,p_item_plug_id=>wwv_flow_imp.id(34863856715238719)
+,p_prompt=>'Search'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_item(
+ p_id=>wwv_flow_imp.id(34864480790238725)
+,p_name=>'P230_TYPE_10'
+,p_item_sequence=>10
+,p_item_plug_id=>wwv_flow_imp.id(34864336605238724)
+,p_prompt=>'DBID'
+,p_display_as=>'NATIVE_TEXT_FIELD'
+,p_cSize=>30
+,p_field_template=>wwv_flow_imp.id(22377396899733685)
+,p_item_template_options=>'#DEFAULT#'
+,p_attribute_01=>'N'
+,p_attribute_02=>'N'
+,p_attribute_04=>'TEXT'
+,p_attribute_05=>'BOTH'
+);
+wwv_flow_imp_page.create_page_da_event(
+ p_id=>wwv_flow_imp.id(34864113510238722)
+,p_name=>'Refresh Tree'
+,p_event_sequence=>10
+,p_triggering_element_type=>'BUTTON'
+,p_triggering_button_id=>wwv_flow_imp.id(34863947643238720)
+,p_bind_type=>'bind'
+,p_execution_type=>'IMMEDIATE'
+,p_bind_event_type=>'click'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(34864276387238723)
+,p_event_id=>wwv_flow_imp.id(34864113510238722)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_name=>'Refresh'
+,p_action=>'NATIVE_REFRESH'
+,p_affected_elements_type=>'REGION'
+,p_affected_region_id=>wwv_flow_imp.id(34863856715238719)
 );
 end;
 /
