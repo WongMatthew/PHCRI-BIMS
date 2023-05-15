@@ -28,7 +28,7 @@ prompt APPLICATION 240101 - PR Billing
 -- Application Export:
 --   Application:     240101
 --   Name:            PR Billing
---   Date and Time:   10:43 Monday May 15, 2023
+--   Date and Time:   11:56 Monday May 15, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -39,7 +39,7 @@ prompt APPLICATION 240101 - PR Billing
 --       Processes:               65
 --       Regions:                 93
 --       Buttons:                 88
---       Dynamic Actions:         62
+--       Dynamic Actions:         64
 --     Shared Components:
 --       Logic:
 --         Items:                  1
@@ -119,8 +119,8 @@ wwv_flow_imp.create_flow(
 ,p_auto_time_zone=>'N'
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'PR Billing'
-,p_last_updated_by=>'mwong'
-,p_last_upd_yyyymmddhh24miss=>'20230515103816'
+,p_last_updated_by=>'MWONG'
+,p_last_upd_yyyymmddhh24miss=>'20230515113622'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>17
 ,p_print_server_type=>'INSTANCE'
@@ -34722,7 +34722,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'02'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230515103342'
+,p_last_upd_yyyymmddhh24miss=>'20230515113622'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(91036501856246947)
@@ -34840,17 +34840,19 @@ wwv_flow_imp_page.create_page_item(
 ,p_prompt=>'Department Name'
 ,p_source=>'DEPARTMENT_NAME'
 ,p_source_type=>'REGION_SOURCE_COLUMN'
-,p_display_as=>'NATIVE_TEXTAREA'
-,p_cSize=>30
-,p_cMaxlength=>500
-,p_cHeight=>5
+,p_display_as=>'NATIVE_SELECT_LIST'
+,p_named_lov=>'ORGANIZATION_NAME'
+,p_lov=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'SELECT NAME D, DBID R',
+'FROM ORGANIZATION'))
+,p_lov_display_null=>'YES'
+,p_cHeight=>1
 ,p_field_template=>wwv_flow_imp.id(41858291462675001)
 ,p_item_template_options=>'#DEFAULT#'
 ,p_is_persistent=>'N'
-,p_attribute_01=>'Y'
+,p_lov_display_extra=>'YES'
+,p_attribute_01=>'NONE'
 ,p_attribute_02=>'N'
-,p_attribute_03=>'N'
-,p_attribute_04=>'BOTH'
 );
 wwv_flow_imp_page.create_page_item(
  p_id=>wwv_flow_imp.id(34865053134238731)
@@ -35318,6 +35320,48 @@ wwv_flow_imp_page.create_page_da_action(
 ,p_action_sequence=>10
 ,p_execute_on_page_init=>'N'
 ,p_action=>'NATIVE_DIALOG_CANCEL'
+);
+wwv_flow_imp_page.create_page_da_event(
+ p_id=>wwv_flow_imp.id(35023145944976701)
+,p_name=>'Edit Report - Dialog Closed'
+,p_event_sequence=>10
+,p_triggering_element_type=>'REGION'
+,p_triggering_region_id=>wwv_flow_imp.id(91036501856246947)
+,p_bind_type=>'bind'
+,p_execution_type=>'IMMEDIATE'
+,p_bind_event_type=>'apexafterclosedialog'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(35023242661976702)
+,p_event_id=>wwv_flow_imp.id(35023145944976701)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_name=>'Refresh'
+,p_action=>'NATIVE_REFRESH'
+,p_affected_elements_type=>'REGION'
+,p_affected_region_id=>wwv_flow_imp.id(91036501856246947)
+);
+wwv_flow_imp_page.create_page_da_event(
+ p_id=>wwv_flow_imp.id(35023350558976703)
+,p_name=>'Edit Report - Dialog Closed_1'
+,p_event_sequence=>20
+,p_triggering_element_type=>'REGION'
+,p_triggering_region_id=>wwv_flow_imp.id(91036501856246947)
+,p_bind_type=>'bind'
+,p_execution_type=>'IMMEDIATE'
+,p_bind_event_type=>'apexafterclosecanceldialog'
+);
+wwv_flow_imp_page.create_page_da_action(
+ p_id=>wwv_flow_imp.id(35023426477976704)
+,p_event_id=>wwv_flow_imp.id(35023350558976703)
+,p_event_result=>'TRUE'
+,p_action_sequence=>10
+,p_execute_on_page_init=>'N'
+,p_name=>'Refresh'
+,p_action=>'NATIVE_REFRESH'
+,p_affected_elements_type=>'REGION'
+,p_affected_region_id=>wwv_flow_imp.id(91036501856246947)
 );
 wwv_flow_imp_page.create_page_process(
  p_id=>wwv_flow_imp.id(35007642807575417)
