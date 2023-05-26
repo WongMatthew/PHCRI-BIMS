@@ -28,7 +28,7 @@ prompt APPLICATION 104 - HLI BIMS - Update
 -- Application Export:
 --   Application:     104
 --   Name:            HLI BIMS - Update
---   Date and Time:   10:30 Tuesday May 16, 2023
+--   Date and Time:   15:27 Friday May 26, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -115,7 +115,7 @@ wwv_flow_imp.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'HLI BIMS - Update'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230512122600'
+,p_last_upd_yyyymmddhh24miss=>'20230525092247'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>4
 ,p_print_server_type=>'INSTANCE'
@@ -18618,7 +18618,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'18'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230509094307'
+,p_last_upd_yyyymmddhh24miss=>'20230525092247'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(33562241443454376)
@@ -18763,6 +18763,7 @@ wwv_flow_imp_page.create_worksheet_rpt(
 ,p_report_alias=>'335662'
 ,p_status=>'PUBLIC'
 ,p_is_default=>'Y'
+,p_display_rows=>20
 ,p_report_columns=>'SPECIMEN_CODE:DISPLAY:DESCRIPTION:SORT_ORDER:ACTIVE:'
 );
 wwv_flow_imp_page.create_page_button(
