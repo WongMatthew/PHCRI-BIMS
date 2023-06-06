@@ -28,7 +28,7 @@ prompt APPLICATION 104 - HLI BIMS - Update
 -- Application Export:
 --   Application:     104
 --   Name:            HLI BIMS - Update
---   Date and Time:   10:59 Tuesday June 6, 2023
+--   Date and Time:   12:04 Tuesday June 6, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -115,7 +115,7 @@ wwv_flow_imp.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'HLI BIMS - Update'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230606102747'
+,p_last_upd_yyyymmddhh24miss=>'20230606120440'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>4
 ,p_print_server_type=>'INSTANCE'
@@ -227,7 +227,7 @@ wwv_flow_imp_shared.create_list_item(
 wwv_flow_imp_shared.create_list_item(
  p_id=>wwv_flow_imp.id(35643507019273807)
 ,p_list_item_display_sequence=>80
-,p_list_item_link_text=>'3'
+,p_list_item_link_text=>'Search'
 ,p_list_item_link_target=>'f?p=&APP_ID.:4:&APP_SESSION.::&DEBUG.:::'
 ,p_list_item_icon=>'fa-search'
 ,p_list_item_current_type=>'COLON_DELIMITED_PAGE_LIST'
@@ -773,8 +773,8 @@ wwv_flow_imp_shared.create_menu_option(
 );
 wwv_flow_imp_shared.create_menu_option(
  p_id=>wwv_flow_imp.id(35644435090273812)
-,p_short_name=>'3'
-,p_link=>'f?p=&APP_ID.:4:&APP_SESSION.::&DEBUG.:::'
+,p_short_name=>'Search'
+,p_link=>'f?p=&APP_ID.:4:&SESSION.::&DEBUG.:::'
 ,p_page_id=>4
 );
 end;
