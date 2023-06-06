@@ -28,7 +28,7 @@ prompt APPLICATION 104 - HLI BIMS - Update
 -- Application Export:
 --   Application:     104
 --   Name:            HLI BIMS - Update
---   Date and Time:   12:04 Tuesday June 6, 2023
+--   Date and Time:   16:10 Tuesday June 6, 2023
 --   Exported By:     MWONG
 --   Flashback:       0
 --   Export Type:     Application Export
@@ -115,7 +115,7 @@ wwv_flow_imp.create_flow(
 ,p_substitution_string_01=>'APP_NAME'
 ,p_substitution_value_01=>'HLI BIMS - Update'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230606120440'
+,p_last_upd_yyyymmddhh24miss=>'20230606160800'
 ,p_file_prefix => nvl(wwv_flow_application_install.get_static_app_file_prefix,'')
 ,p_files_version=>4
 ,p_print_server_type=>'INSTANCE'
@@ -17108,7 +17108,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'18'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230606101541'
+,p_last_upd_yyyymmddhh24miss=>'20230606155450'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(35026604197976736)
@@ -17117,7 +17117,6 @@ wwv_flow_imp_page.create_page_plug(
 ,p_component_template_options=>'#DEFAULT#'
 ,p_plug_template=>wwv_flow_imp.id(22264187968733623)
 ,p_plug_display_sequence=>10
-,p_include_in_reg_disp_sel_yn=>'Y'
 ,p_query_type=>'SQL'
 ,p_plug_source=>wwv_flow_string.join(wwv_flow_t_varchar2(
 'SELECT "DBID", ',
@@ -17251,7 +17250,9 @@ wwv_flow_imp_page.create_worksheet_column(
 ,p_column_identifier=>'H'
 ,p_column_label=>'Active'
 ,p_column_type=>'STRING'
-,p_use_as_row_header=>'N'
+,p_display_text_as=>'WITHOUT_MODIFICATION'
+,p_column_alignment=>'CENTER'
+,p_format_mask=>'PCT_GRAPH:::'
 );
 wwv_flow_imp_page.create_worksheet_rpt(
  p_id=>wwv_flow_imp.id(35647611077313182)
@@ -17260,7 +17261,7 @@ wwv_flow_imp_page.create_worksheet_rpt(
 ,p_report_alias=>'356477'
 ,p_status=>'PUBLIC'
 ,p_is_default=>'Y'
-,p_report_columns=>'DBID:STUDY_CODE:NAME:ORGANIZATION_DBID:INVESTIGATOR_DBID:COORDINATOR_DBID'
+,p_report_columns=>'STUDY_CODE:NAME:ORGANIZATION_DBID:INVESTIGATOR_DBID:COORDINATOR_DBID:ACTIVE:'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(35644005393273810)
@@ -17675,7 +17676,7 @@ wwv_flow_imp_page.create_page(
 ,p_protection_level=>'C'
 ,p_page_component_map=>'18'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230509102235'
+,p_last_upd_yyyymmddhh24miss=>'20230606160800'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(33600831516881840)
@@ -17780,6 +17781,18 @@ wwv_flow_imp_page.create_worksheet_rpt(
 ,p_status=>'PUBLIC'
 ,p_is_default=>'Y'
 ,p_report_columns=>'NAME:SORT_ORDER:ACTIVE:'
+,p_sort_column_1=>'SORT_ORDER'
+,p_sort_direction_1=>'ASC'
+,p_sort_column_2=>'0'
+,p_sort_direction_2=>'ASC'
+,p_sort_column_3=>'0'
+,p_sort_direction_3=>'ASC'
+,p_sort_column_4=>'0'
+,p_sort_direction_4=>'ASC'
+,p_sort_column_5=>'0'
+,p_sort_direction_5=>'ASC'
+,p_sort_column_6=>'0'
+,p_sort_direction_6=>'ASC'
 );
 wwv_flow_imp_page.create_page_button(
  p_id=>wwv_flow_imp.id(33660432513616937)
@@ -18858,13 +18871,13 @@ wwv_flow_imp_page.create_page(
  p_id=>210
 ,p_name=>'Specimen Types'
 ,p_alias=>'SPECIMEN-TYPES'
-,p_step_title=>'specimen types'
+,p_step_title=>'Specimen Types'
 ,p_autocomplete_on_off=>'OFF'
 ,p_page_template_options=>'#DEFAULT#'
 ,p_protection_level=>'C'
 ,p_page_component_map=>'18'
 ,p_last_updated_by=>'MWONG'
-,p_last_upd_yyyymmddhh24miss=>'20230606101527'
+,p_last_upd_yyyymmddhh24miss=>'20230606160719'
 );
 wwv_flow_imp_page.create_page_plug(
  p_id=>wwv_flow_imp.id(33562241443454376)
@@ -18949,35 +18962,12 @@ wwv_flow_imp_page.create_worksheet_column(
 ,p_column_identifier=>'A'
 ,p_column_label=>'Dbid'
 ,p_column_type=>'NUMBER'
-,p_heading_alignment=>'RIGHT'
-,p_column_alignment=>'RIGHT'
-,p_tz_dependent=>'N'
-,p_use_as_row_header=>'N'
-);
-wwv_flow_imp_page.create_worksheet_column(
- p_id=>wwv_flow_imp.id(33567679040465910)
-,p_db_column_name=>'ACTIVE'
-,p_display_order=>57
-,p_column_identifier=>'L'
-,p_column_label=>'Active'
-,p_column_type=>'STRING'
-,p_display_text_as=>'WITHOUT_MODIFICATION'
-,p_column_alignment=>'CENTER'
-,p_format_mask=>'PCT_GRAPH:::'
-);
-wwv_flow_imp_page.create_worksheet_column(
- p_id=>wwv_flow_imp.id(36706851374029948)
-,p_db_column_name=>'SPECIMEN_CODE'
-,p_display_order=>67
-,p_column_identifier=>'R'
-,p_column_label=>'Specimen Code'
-,p_column_type=>'STRING'
-,p_use_as_row_header=>'N'
+,p_display_text_as=>'HIDDEN_ESCAPE_SC'
 );
 wwv_flow_imp_page.create_worksheet_column(
  p_id=>wwv_flow_imp.id(36706923318029949)
 ,p_db_column_name=>'DESCRIPTION'
-,p_display_order=>77
+,p_display_order=>11
 ,p_column_identifier=>'S'
 ,p_column_label=>'Description'
 ,p_column_type=>'STRING'
@@ -18986,21 +18976,41 @@ wwv_flow_imp_page.create_worksheet_column(
 wwv_flow_imp_page.create_worksheet_column(
  p_id=>wwv_flow_imp.id(36707084282029950)
 ,p_db_column_name=>'DISPLAY'
-,p_display_order=>87
+,p_display_order=>21
 ,p_column_identifier=>'T'
 ,p_column_label=>'Display'
 ,p_column_type=>'STRING'
 ,p_use_as_row_header=>'N'
 );
 wwv_flow_imp_page.create_worksheet_column(
+ p_id=>wwv_flow_imp.id(36706851374029948)
+,p_db_column_name=>'SPECIMEN_CODE'
+,p_display_order=>31
+,p_column_identifier=>'R'
+,p_column_label=>'Specimen Code'
+,p_column_type=>'STRING'
+,p_use_as_row_header=>'N'
+);
+wwv_flow_imp_page.create_worksheet_column(
  p_id=>wwv_flow_imp.id(36793619423580001)
 ,p_db_column_name=>'SORT_ORDER'
-,p_display_order=>97
+,p_display_order=>41
 ,p_column_identifier=>'U'
 ,p_column_label=>'Sort Order'
 ,p_column_type=>'NUMBER'
 ,p_column_alignment=>'RIGHT'
 ,p_use_as_row_header=>'N'
+);
+wwv_flow_imp_page.create_worksheet_column(
+ p_id=>wwv_flow_imp.id(33567679040465910)
+,p_db_column_name=>'ACTIVE'
+,p_display_order=>51
+,p_column_identifier=>'L'
+,p_column_label=>'Active'
+,p_column_type=>'STRING'
+,p_display_text_as=>'WITHOUT_MODIFICATION'
+,p_column_alignment=>'CENTER'
+,p_format_mask=>'PCT_GRAPH:::'
 );
 wwv_flow_imp_page.create_worksheet_rpt(
  p_id=>wwv_flow_imp.id(33566172529454851)
